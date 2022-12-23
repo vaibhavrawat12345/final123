@@ -42,7 +42,7 @@ app.get("/purchases",function(req,res){
   let shop = req.query.shop;
   let sort = req.query.sort;
 
-  const query = `SELECT * FROM purchase`;
+  const query = `SELECT * FROM purch`;
   client.query(query , function (err, result) {
     if (err) {
         res.status(400).send(err);
@@ -52,11 +52,10 @@ app.get("/purchases",function(req,res){
 
           if (product) {
             let pro = product.split(",");
-            arr1 = arr1.filter((st) => pro.find((c1) => c1 === st.productname));
+            arr1 = arr1.filter((st) => pro.find((c1) => c1 * 1 === st.productid));
           }
           if (shop) {
-            let shop1 = shop.split(",");
-            arr1 = arr1.filter((st) => shop1.find((c1) => c1 * 1 === st.shopid));
+            arr1 = arr1.filter((st) => shop=== st.name);
           }
           if (sort === "QtyAsc") arr1.sort((st1, st2) => st1.quantity - st2.quantity);
           if (sort === "QtyDesc") arr1.sort((st1, st2) => st2.quantity - st1.quantity);
@@ -83,7 +82,7 @@ app.get("/purchases",function(req,res){
 
     app.get("/totalpurchases/products/:id", function (req, res) {
       let productid = req.params.id; 
-      const query = `select * from purchase WHERE productid= $1`;
+      const query = `select * from purch  WHERE productid= $1`;
       client.query(query ,[productid], function (err, result) {
           if (err) {
               res.status(400).send(err);
@@ -121,7 +120,7 @@ app.get("/purchases",function(req,res){
 
             app.get("/totalpurchases/shops/:id", function (req, res) {
               let shopid = req.params.id; 
-              const query = `select * from purchase WHERE shopid= $1`;
+              const query = `select * from purch  WHERE shopid= $1`;
               client.query(query ,[shopid], function (err, result) {
                   if (err) {
                       res.status(400).send(err);
@@ -213,7 +212,7 @@ app.post("/products", function (req, res, next) {
 
 app.post("/purchases", function (req, res, next) {
   var values = Object.values(req.body);console.log(values);
-  const query = `INSERT INTO purchase (shopid,productId,quantity,price) VALUES ($1,$2,$3,$4)`;
+  const query = `INSERT INTO purch  (shopid,productId,quantity,price) VALUES ($1,$2,$3,$4)`;
   client.query(query, values, function (err, result) {if (err) {res.status(400).send(err);}
   res.send("insertion successful");
   });
@@ -247,7 +246,7 @@ app.put("/products/:productId", function (req, res, next) {
 app.get("/purchases/shops/:shopId", function (req, res, next) {
   console.log("Inside put of user");
   let shopId = req.params.shopId;
-  const query = `select * from purchase WHERE shopId= $1`;
+  const query = `select * from purch  WHERE shopId= $1`;
   client.query(query ,[shopId], function (err, result) {
       if (err) {
           res.status(400).send(err);
@@ -259,7 +258,7 @@ app.get("/purchases/shops/:shopId", function (req, res, next) {
 app.get("/purchases/products/:productid", function (req, res, next) {
   console.log("Inside put of user");
   let productid = req.params.productid;
-  const query = `select * from purchase WHERE productid= $1`;
+  const query = `select * from purch  WHERE productid= $1`;
   client.query(query ,[productid], function (err, result) {
       if (err) {
           res.status(400).send(err);
