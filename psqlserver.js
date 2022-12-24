@@ -55,7 +55,7 @@ app.get("/purchases",function(req,res){
             arr1 = arr1.filter((st) => pro.find((c1) => c1 * 1 === st.productid));
           }
           if (shop) {
-            arr1 = arr1.filter((st) => shop=== st.name);
+            arr1 = arr1.filter((st) => shop * 1 === st.shopid);
           }
           if (sort === "QtyAsc") arr1.sort((st1, st2) => st1.quantity - st2.quantity);
           if (sort === "QtyDesc") arr1.sort((st1, st2) => st2.quantity - st1.quantity);
